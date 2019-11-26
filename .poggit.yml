@@ -2,6 +2,6 @@
 branches:
 - master
 projects:
-  Server-Booster:
+  ServerBooster:
     path: ""
 ...
