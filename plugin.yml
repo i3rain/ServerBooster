@@ -11,9 +11,6 @@ permissions:
  booster:
   description: Erlaube die Verwendung aller Booster-Befehle
   default: op
- boosters:
-  description: Schaue welche Boosters noch läufen
-  default: true
   children:
       booster.command:
         description: Erlaube die Verwendung von /booster
