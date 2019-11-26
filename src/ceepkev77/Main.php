@@ -74,7 +74,7 @@ class Main extends PluginBase implements Listener {
             $player = $event->getPlayer();
            $player->setAllowFlight(FALSE);
            $player->sendMessage("§bBooster§c §8»§r §cDer FlyBooster ist deaktiviert, daher kannst du nicht Fliegen.");
-	   ok weiss schon. $player = $event->getPlayer();
+	   $player = $event->getPlayer();
           if($player->getGamemode() == 1) {
             $player->setAllowFlight(TRUE);
           } 
