@@ -79,7 +79,7 @@ class Main extends PluginBase implements Listener {
             $player = $event->getPlayer();
             $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
             $player->addEffect($effect);
-            $player->sendMessgae("§bBooster§c §8»§r §aDer BreakBooster ist aktiv, daher kannst du schneller abbauen.");
+            $player->sendMessage("§bBooster§c §8»§r §aDer BreakBooster ist aktiv, daher kannst du schneller abbauen.");
         } else {
             $player = $event->getPlayer();
             $player->sendMessage("§bBooster§c §8»§r §cDer BreakBooster ist deaktiviert.");
