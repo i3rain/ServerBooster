@@ -195,8 +195,9 @@ class Main extends PluginBase implements Listener {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
                                  $player = $sender->getName();
                                  $p->setAllowFlight(TRUE);
-                            $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
+                            
                             }
+				    $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
                             $config->set("FlyBooster", true);
                             $config->save();
                                $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
@@ -211,10 +212,11 @@ class Main extends PluginBase implements Listener {
                                             $player = $sender->getName();
                                             $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
                                             $p->addEffect($effect);
-                                            $this->getScheduler()->scheduleRepeatingTask(new BreakBooster($this), 30);
+                                            
                                               }
                                               $config->set("BreakBooster", true);
                             $config->save();
+				    $this->getScheduler()->scheduleRepeatingTask(new BreakBooster($this), 30);
                                               $this->getServer()->broadcastMessage($this->prefix . "§aDer §bBreakBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem BreakBooster von §b$player §aschneller abbauen.");    
                              return true;
 
