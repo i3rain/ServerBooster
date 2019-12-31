@@ -197,11 +197,12 @@ class Main extends PluginBase implements Listener {
                                  $p->setAllowFlight(TRUE);
                             
                             }
-				    $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
+				    
                             $config->set("FlyBooster", true);
                             $config->save();
                                $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
-                              return true;
+                               $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
+				    return true;
 
                         case "break":
                             if (!$sender->hasPermission("booster.break")) {
