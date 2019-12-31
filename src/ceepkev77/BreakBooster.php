@@ -22,15 +22,15 @@ class BreakBooster extends Task
         $this->plugin->bsek--;
             if($this->plugin->bsek === 30) {
                 foreach ($this->plugin->getServer()->getOnlinePlayers() as $p) {
-                         $p->sendMessage("§bBooster§c §8»§l§aDer BreakBooster wird in §c30 sekunden §adeaktiviert.");
+                         $p->sendMessage("§bBooster§c §8» §l§aDer BreakBooster wird in §c30 sekunden §adeaktiviert.");
                          }
             }elseif($this->plugin->bsek === 10) {
             foreach ($this->plugin->getServer()->getOnlinePlayers() as $p) {
-                         $p->sendMessage("§bBooster§c §8»§l§aDer BreakBooster wird in §c10 sekunden §adeaktiviert.");
+                         $p->sendMessage("§bBooster§c §8» §l§aDer BreakBooster wird in §c10 sekunden §adeaktiviert.");
                          }
             }elseif($this->plugin->bsek === 0) {
                 foreach ($this->plugin->getServer()->getOnlinePlayers() as $p) {
-                         $p->sendMessage("§bBooster§c §8»§l§aDer BreakBooster wurde nun deaktiviert. \n\n§r§aDu kannst nun nicht mehr schneller abbauen.");
+                         $p->sendMessage("§bBooster§c §8» §l§aDer BreakBooster wurde nun deaktiviert. \n\n§r§aDu kannst nun nicht mehr schneller abbauen.");
                     $p->removeAllEffects();
                     $p->getLevel()->addSound(new PopSound($p));
                     $config->set("BreakBooster", false);
