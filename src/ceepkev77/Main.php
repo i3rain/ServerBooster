@@ -166,7 +166,6 @@ class Main extends PluginBase implements Listener {
                                 $sender->sendMessage(TextFormat::AQUA . " - " . $msgArg . "\n");
                             }
                             return true;
-                            break;
                         case "feed":
                             if (!$sender->hasPermission("booster.feed")) {
                                  $sender->sendMessage($this->noperm);
@@ -174,11 +173,11 @@ class Main extends PluginBase implements Listener {
                             }
                             if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                 $player = $sender->getName();
                                  $p->setFood(20);
+                            }
+                                 $player = $sender->getName();
                                  $this->getServer()->broadcastMessage($this->prefix . "§fDer §fFeed Booster §fwurde von §6$player §faktiviert.");
                                 return true;
-                                }
                             }elseif ($sender->hasPermission("booster.feed")){
                         		$cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
                                 if (!$cooldown->exists($sender->getName() . "Feed")){
@@ -189,9 +188,9 @@ class Main extends PluginBase implements Listener {
 								$last = new DateTime($cooldown->get($sender->getName() . "Feed"));
 								if (new DateTime("now") > $last) {
 									foreach ($this->getServer()->getOnlinePlayers() as $p) {
-										$player = $sender->getName();
 										$p->setFood(20);
-									}
+                                    }
+                                    $player = $sender->getName();
 									$date = new DateTime('+1 day');
 									$cooldown->set($sender->getName() . "Feed", $date->format('Y-m-d H:i:s'));
 									$cooldown->save();
@@ -209,9 +208,9 @@ class Main extends PluginBase implements Listener {
                             }
                             if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                 $player = $sender->getName();
                                  $p->setHealth(20);
                             }
+                                 $player = $sender->getName();
                                  $this->getServer()->broadcastMessage($this->prefix . "§aDer §bHealBooster §awurde von §b$player §aaktiviert.");
                                 return true;
                             }elseif ($sender->hasPermission("booster.heal")){
@@ -224,9 +223,9 @@ class Main extends PluginBase implements Listener {
                                 $last = new DateTime($cooldown->get($sender->getName() . "Heal"));
                                 if (new DateTime("now") > $last) {
                                     foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                        $player = $sender->getName();
                                         $p->setHealth(20);
                                     }
+                                    $player = $sender->getName();
                                     $date = new DateTime('+1 day');
                                     $cooldown->set($sender->getName() . "Heal", $date->format('Y-m-d H:i:s'));
                                     $cooldown->save();
@@ -248,9 +247,9 @@ class Main extends PluginBase implements Listener {
                             }
                            if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                $player = $sender->getName();
                                 $p->setAllowFlight(TRUE);
                            }
+                           $player = $sender->getName();
                            $config->set("FlyBooster", true);
                            $config->save();
                               $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
@@ -266,9 +265,9 @@ class Main extends PluginBase implements Listener {
                                $last = new DateTime($cooldown->get($sender->getName() . "Fly"));
                                if (new DateTime("now") > $last) {
                                    foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                       $player = $sender->getName();
                                        $p->setAllowFlight(TRUE);
                                    }
+                                   $player = $sender->getName();
                                    $date = new DateTime('+1 day');
                                    $cooldown->set($sender->getName() . "Fly", $date->format('Y-m-d H:i:s'));
                                    $cooldown->save();
@@ -293,10 +292,10 @@ class Main extends PluginBase implements Listener {
                             }
                            if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                $player = $sender->getName();
                                 $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
                                 $p->addEffect($effect);
                            }
+                           $player = $sender->getName();
                            $config->set("BreakBooster", true);
                            $config->save();
                               $this->getServer()->broadcastMessage($this->prefix . "§aDer §bBreakBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem BreakBooster von §b$player §aschneller abbauen.");
@@ -312,10 +311,10 @@ class Main extends PluginBase implements Listener {
                                $last = new DateTime($cooldown->get($sender->getName() . "Break"));
                                if (new DateTime("now") > $last) {
                                    foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                       $player = $sender->getName();
                                        $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
                                        $p->addEffect($effect);
                                    }
+                                   $player = $sender->getName();
                                    $date = new DateTime('+1 day');
                                    $cooldown->set($sender->getName() . "Break", $date->format('Y-m-d H:i:s'));
                                    $cooldown->save();
