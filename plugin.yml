@@ -15,6 +15,9 @@ permissions:
       booster.command:
         description: Erlaube die Verwendung von /booster
         default: op
+      booster.bypass:
+        description: Umgehe den Cooldown aller Booster
+        default: op
       booster.version:
         description: Erlaube die Verwendung der Command /Booster-Version
         default: op
