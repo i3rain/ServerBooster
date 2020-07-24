@@ -25,6 +25,7 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use jojoe77777\FormAPI;
 use DateTime;
+use DateInterval;
 
 class Main extends PluginBase implements Listener {
 
@@ -62,6 +63,8 @@ class Main extends PluginBase implements Listener {
         $config->set("BreakBooster", false);
                             $config->save();
         //$effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
+		$cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+		$cooldown->save();
     }   
 
     public function onJoinBooster(PlayerJoinEvent $event) {
@@ -69,11 +72,11 @@ class Main extends PluginBase implements Listener {
         if ($config->get("FlyBooster") == true) {
             $player = $event->getPlayer();
             $player->setAllowFlight(TRUE);
-            $player->sendMessage("§bBooster§c §8»§r §aDer FlyBooster ist aktiv, daher ist dein FlyMod aktiviert.");
+            $player->sendMessage("§bBooster§c §8»§r §aDer FlyBooster ist aktiv, daher kannst du Fliegen.");
         } else {
             $player = $event->getPlayer();
            $player->setAllowFlight(FALSE);
-           $player->sendMessage("§bBooster§c §8»§r §cDer FlyBooster ist deaktiviert, daher kannst du nicht Fliegen.");
+           $player->sendMessage("§bBooster§c §8»§r §cDer FlyBooster ist deaktiviert.");
 	   $player = $event->getPlayer();
           if($player->getGamemode() == 1) {
             $player->setAllowFlight(TRUE);
@@ -169,58 +172,163 @@ class Main extends PluginBase implements Listener {
                                  $sender->sendMessage($this->noperm);
                                 return true;
                             }
+                            if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
                                  $player = $sender->getName();
                                  $p->setFood(20);
-                            }
-                                  $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFeedBooster §awurde von §b$player §aaktiviert.");
-                               return true;
+                                 $this->getServer()->broadcastMessage($this->prefix . "§fDer §fFeed Booster §fwurde von §6$player §faktiviert.");
+                                return true;
+                                }
+                            }elseif ($sender->hasPermission("booster.feed")){
+                        		$cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                                if (!$cooldown->exists($sender->getName() . "Feed")){
+                                   $cooldown->set($sender->getName() . "Feed", date('Y-m-d H:i:s'));
+                                   $cooldown->save();
+                                }
+								$cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+								$last = new DateTime($cooldown->get($sender->getName() . "Feed"));
+								if (new DateTime("now") > $last) {
+									foreach ($this->getServer()->getOnlinePlayers() as $p) {
+										$player = $sender->getName();
+										$p->setFood(20);
+									}
+									$date = new DateTime('+1 day');
+									$cooldown->set($sender->getName() . "Feed", $date->format('Y-m-d H:i:s'));
+									$cooldown->save();
+									$sender->sendMessage($this->prefix . "§aAm §c" . $date->format('Y-m-d H:i:s') . " §akannst du deinen nächsten Feed Booster abholen!");	
+									$this->getServer()->broadcastMessage($this->prefix . "§aDer §bFeedBooster §awurde von §b$player §aaktiviert.");
+                                }else{
+									$sender->sendMessage($this->prefix . "§aAm §c" . $cooldown->get($sender->getName() . "Feed") . " §akannst du erst deinen nächsten Feed Booster aktivieren!");
+                                }
+                            }	
+                            return true;
                         case "heal":
-                            if (!$sender->hasPermission("booster.heal")) {
+                             if (!$sender->hasPermission("booster.heal")) {
                                  $sender->sendMessage($this->noperm);
                                 return true;
                             }
-                            foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                  $player = $sender->getName();
-                                  $p->setHealth(20);                            
-                            }
-                                  $this->getServer()->broadcastMessage($this->prefix . "§aDer §bHealBooster §awurde von §b$player §aaktiviert.");
-
-                                return true;
-                        case "fly":
-                            if (!$sender->hasPermission("booster.fly")) {
-                                 $sender->sendMessage($this->noperm);
-                                return true;
-                            }
+                            if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
                                  $player = $sender->getName();
-                                 $p->setAllowFlight(TRUE);
-                            
+                                 $p->setHealth(20);
                             }
-				    
-                            $config->set("FlyBooster", true);
-                            $config->save();
-                               $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
-                               $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
-				    return true;
-
-                        case "break":
-                            if (!$sender->hasPermission("booster.break")) {
-                                 $sender->sendMessage($this->noperm);
+                                 $this->getServer()->broadcastMessage($this->prefix . "§aDer §bHealBooster §awurde von §b$player §aaktiviert.");
+                                return true;
+                            }elseif ($sender->hasPermission("booster.heal")){
+                                $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                                if (!$cooldown->exists($sender->getName() . "Heal")){
+                                   $cooldown->set($sender->getName() . "Heal", date('Y-m-d H:i:s'));
+                                   $cooldown->save();
+                                }
+                                $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                                $last = new DateTime($cooldown->get($sender->getName() . "Heal"));
+                                if (new DateTime("now") > $last) {
+                                    foreach ($this->getServer()->getOnlinePlayers() as $p) {
+                                        $player = $sender->getName();
+                                        $p->setHealth(20);
+                                    }
+                                    $date = new DateTime('+1 day');
+                                    $cooldown->set($sender->getName() . "Heal", $date->format('Y-m-d H:i:s'));
+                                    $cooldown->save();
+                                    $sender->sendMessage($this->prefix . "§aAm §c" . $date->format('Y-m-d H:i:s') . " §akannst du deinen nächsten HealBooster aktivieren!");	
+                                    $this->getServer()->broadcastMessage($this->prefix . "§aDer §bHealBooster §awurde von §b$player §aaktiviert.");
+                                }else{
+                                    $sender->sendMessage($this->prefix . "§aAm §c" . $cooldown->get($sender->getName() . "Heal") . " §akannst du erst wieder einen HealBooster aktivieren!");
+                                }
+                            }	
+                            return true;
+                        case "fly":
+                            if (!$sender->hasPermission("booster.fly")) {
+                                $sender->sendMessage($this->noperm);
+                               return true;
+                           }
+                           if ($config->get("FlyBooster") == true){
+                            $sender->sendMessage($this->prefix . "§cMomentan läuft ein FlyBooster!");
                             return true;
                             }
+                           if ($sender->hasPermission("booster.bypass")) {
                             foreach ($this->getServer()->getOnlinePlayers() as $p) {
-                                            $player = $sender->getName();
-                                            $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
-                                            $p->addEffect($effect);
-                                            
-                                              }
-                                              $config->set("BreakBooster", true);
-                            $config->save();
-				    $this->getScheduler()->scheduleRepeatingTask(new BreakBooster($this), 30);
-                                              $this->getServer()->broadcastMessage($this->prefix . "§aDer §bBreakBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem BreakBooster von §b$player §aschneller abbauen.");    
-                             return true;
-
+                                $player = $sender->getName();
+                                $p->setAllowFlight(TRUE);
+                           }
+                           $config->set("FlyBooster", true);
+                           $config->save();
+                              $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
+                              $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
+                   return true;
+                           }elseif ($sender->hasPermission("booster.fly")){
+                               $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                               if (!$cooldown->exists($sender->getName() . "Fly")){
+                                  $cooldown->set($sender->getName() . "Fly", date('Y-m-d H:i:s'));
+                                  $cooldown->save();
+                               }
+                               $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                               $last = new DateTime($cooldown->get($sender->getName() . "Fly"));
+                               if (new DateTime("now") > $last) {
+                                   foreach ($this->getServer()->getOnlinePlayers() as $p) {
+                                       $player = $sender->getName();
+                                       $p->setAllowFlight(TRUE);
+                                   }
+                                   $date = new DateTime('+1 day');
+                                   $cooldown->set($sender->getName() . "Fly", $date->format('Y-m-d H:i:s'));
+                                   $cooldown->save();
+                                   $sender->sendMessage($this->prefix . "§aAm §c" . $date->format('Y-m-d H:i:s') . " §akannst du deinen nächsten FlyBooster aktivieren!");	
+                                   $config->set("FlyBooster", true);
+                                   $config->save();
+                                      $this->getServer()->broadcastMessage($this->prefix . "§aDer §bFlyBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem FlyBooster von §b$player §afliegen.");
+                                      $this->getScheduler()->scheduleRepeatingTask(new FlyBooster($this), 30);
+                               }else{
+                                   $sender->sendMessage($this->prefix . "§aAm §c" . $cooldown->get($sender->getName() . "Fly") . " §akannst du erst wieder einen FlyBooster aktivieren!");
+                               }
+                           }	
+                           return true;
+                        case "break":
+                            if (!$sender->hasPermission("booster.break")) {
+                                $sender->sendMessage($this->noperm);
+                               return true;
+                           }
+                           if ($config->get("BreakBooster") == true){
+                            $sender->sendMessage($this->prefix . "§cMomentan läuft ein FlyBooster!");
+                            return true;
+                            }
+                           if ($sender->hasPermission("booster.bypass")) {
+                            foreach ($this->getServer()->getOnlinePlayers() as $p) {
+                                $player = $sender->getName();
+                                $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
+                                $p->addEffect($effect);
+                           }
+                           $config->set("BreakBooster", true);
+                           $config->save();
+                              $this->getServer()->broadcastMessage($this->prefix . "§aDer §bBreakBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem BreakBooster von §b$player §aschneller abbauen.");
+                              $this->getScheduler()->scheduleRepeatingTask(new BreakBooster($this), 30);
+                   return true;
+                           }elseif ($sender->hasPermission("booster.break")){
+                               $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                               if (!$cooldown->exists($sender->getName() . "Break")){
+                                  $cooldown->set($sender->getName() . "Break", date('Y-m-d H:i:s'));
+                                  $cooldown->save();
+                               }
+                               $cooldown = new Config($this->getDataFolder().'cooldown.yml', Config::YAML);
+                               $last = new DateTime($cooldown->get($sender->getName() . "Break"));
+                               if (new DateTime("now") > $last) {
+                                   foreach ($this->getServer()->getOnlinePlayers() as $p) {
+                                       $player = $sender->getName();
+                                       $effect = new EffectInstance(Effect::getEffect(3), 999999999, 3, false);
+                                       $p->addEffect($effect);
+                                   }
+                                   $date = new DateTime('+1 day');
+                                   $cooldown->set($sender->getName() . "Break", $date->format('Y-m-d H:i:s'));
+                                   $cooldown->save();
+                                   $sender->sendMessage($this->prefix . "§aAm §c" . $date->format('Y-m-d H:i:s') . " §akannst du deinen nächsten BreakBooster aktivieren!");	
+                                   $config->set("BreakBooster", true);
+                                   $config->save();
+                                      $this->getServer()->broadcastMessage($this->prefix . "§aDer §bBreakBooster §awurde von §b$player §aaktiviert.\n§r§aDu kannst nun dank dem BreakBooster von §b$player §aschneller abbauen.");
+                                      $this->getScheduler()->scheduleRepeatingTask(new BreakBooster($this), 30);
+                               }else{
+                                   $sender->sendMessage($this->prefix . "§aAm §c" . $cooldown->get($sender->getName() . "Break") . " §akannst du erst wieder einen BreakBooster aktivieren!");
+                               }
+                           }	
+                           return true;
     } 
    }
   }
