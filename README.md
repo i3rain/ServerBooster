@@ -1,2 +1,14 @@
 # ServerBooster
 Dieses Plugin wurde von Ceepkev77 erstellt!
+
+✨ **Adding:**
+```
+• Cooldown dir 1 Day
+• Check if a Booster so running (Fly & Break) 
+• Permission to bypass the Cooldown (booster.bypass)
+```
+
+✨ **Planed Features:**
+```
+• More Booster (XP & Mining)
+```

@@ -24,6 +24,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use jojoe77777\FormAPI;
+use jojoe77777\FormAPI\SimpleForm;
 use DateTime;
 use DateInterval;
 
