@@ -12,3 +12,8 @@ Dieses Plugin wurde von Ceepkev77 erstellt!
 ```
 • More Booster (XP & Mining)
 ```
+
+❗️ **Required**
+```
+• FormAPI
+```
